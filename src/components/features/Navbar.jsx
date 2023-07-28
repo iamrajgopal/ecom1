@@ -144,7 +144,6 @@ function Navbar({ onProductsButtonClick,handleSearchChange }) {
           </Box>
          <Box>
             <Tooltip title="Open Cart">
-            
               <IconButton sx={{ marginRight: "3rem" }}>
                 <Badge badgeContent={count.length} color="success">
                   <Cart sx={{ color: "red" }}>
@@ -183,7 +182,6 @@ function Navbar({ onProductsButtonClick,handleSearchChange }) {
               ))}
             </Menu>
           </Box>
-        
         </Toolbar>
       </Container>
       

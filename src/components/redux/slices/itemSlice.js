@@ -4,7 +4,6 @@ const initialState = {
   count: 10,
   cartItems: [],
   notes: [],
-  words:[]
 };
 
 
