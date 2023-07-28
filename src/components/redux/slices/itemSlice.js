@@ -4,6 +4,7 @@ const initialState = {
   count: 10,
   cartItems: [],
   notes: [],
+  words:[]
 };
 
 
@@ -72,6 +73,9 @@ export const itemSlice = createSlice({
         0
       );
     },
+    setSearchTerm: (state, action) => {
+      return action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -98,7 +102,7 @@ export const {
   addNotes,
   quantityIncrement,
   quantityDecrement,
-  totalPrice,
+  totalPrice,setSearchTerm
 } = itemSlice.actions;
 
 export default itemSlice.reducer;

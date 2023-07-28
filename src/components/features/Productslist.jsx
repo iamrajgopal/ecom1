@@ -18,6 +18,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Pagination1 from "./Pagination";
 
 
+
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -32,19 +33,29 @@ const ExpandMore = styled((props) => {
 export default function Productlist() {
   const [expandedIndex, setExpandedIndex] = useState(-1);
   const [products, setProducts] = useState([]);
-  
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const itemsPerPage = 3;
+  const itemsPerPage = 20;
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  // Create a slice of products to display on the current page
-  const productsToShow = products.slice(startIndex, endIndex);
+  const productsToShow = products
+    .filter((product) =>
+      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .slice(startIndex, endIndex);
 
-  // Calculate the total number of pages
-  const totalPages = Math.ceil(products.length / itemsPerPage);
+  // Calculate the total number of pages based on the filtered products
+  const totalPages = Math.ceil(products.filter((product) =>
+    product.title.toLowerCase().includes(searchTerm.toLowerCase())
+  ).length / itemsPerPage);
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setCurrentPage(1); // Reset to first page on each search
+  };
 
   // Function to handle page changes
   const handlePageChange = (page) => {
@@ -58,7 +69,7 @@ export default function Productlist() {
   const navigate = useNavigate();
 
   let gettingProducts = async () => {
-    let data = await fetch("https://fakestoreapi.com/products");
+    let data = await fetch("https://api.escuelajs.co/api/v1/products");
     try {
       let Jsondata = await data.json();
       setProducts(Jsondata);
@@ -89,6 +100,7 @@ export default function Productlist() {
         alignItems: "center",
       }}
     >
+       {/* <Search1 handleChangeSearch={handleSearchChange} /> */}
       {productsToShow.map((item, index) => {
         const isItemInCart = cartItem.some(
           (cartItem) => cartItem.id === item.id
@@ -108,7 +120,7 @@ export default function Productlist() {
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
                   <img
-                    src={item.image}
+                    src={item.category.image}
                     style={{ objectFit: "contain" }}
                     alt=""
                   ></img>
@@ -119,13 +131,13 @@ export default function Productlist() {
             <CardMedia
               component="img"
               sx={{ width: "10rem", height: "15rem", objectFit: "contain" }}
-              image={item.image}
+              image={item.category.image}
               alt="Paella dish"
             />
             <CardContent>
-              <Typography variant="body2" color="text.secondary">
+              {/* <Typography variant="body2" color="text.secondary">
                 category : {item.category.toUpperCase()}
-              </Typography>
+              </Typography> */}
               <Typography sx={{ marginTop: ".5rem", marginBottom: "1rem" }}>
                 Price : {item.price}
               </Typography>

@@ -3,6 +3,8 @@ import { styled, alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import { useDispatch } from 'react-redux';
+import {setSearchTerm} from '../redux/slices/itemSlice'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -46,7 +48,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+
 export default function Search1() {
+
+    const dispatch = useDispatch();
+
+    const handleChangeSearch = (event) => {
+      const searchTerm = event.target.value;
+      dispatch(setSearchTerm(searchTerm));
+    };
   return (
     <Box sx={{ flexGrow: 1 }}>
 
@@ -57,6 +67,7 @@ export default function Search1() {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
+              onChange={handleChangeSearch}
             />
           </Search>
     </Box>

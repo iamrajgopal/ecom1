@@ -18,15 +18,17 @@ import AdbIcon from "@mui/icons-material/Adb";
 import Cart from "@mui/icons-material/ShoppingCart";
 import Cartdrawer from "./Cartdrawer";
 import { useSelector } from "react-redux";
-import Search1 from "./Search";
+
+
 
 const pages = ["Products", "Pricing", "Blog","Crud"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Profile", "Account", "Dashboard", "Logout",'Logout2'];
 
-function Navbar({ onProductsButtonClick }) {
+function Navbar({ onProductsButtonClick,handleSearchChange }) {
 
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+
 
   let count = useSelector((store)=>store.item.cartItems)
 
@@ -45,6 +47,8 @@ function Navbar({ onProductsButtonClick }) {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+ 
 
   return (
     <AppBar position="static">
@@ -179,7 +183,7 @@ function Navbar({ onProductsButtonClick }) {
               ))}
             </Menu>
           </Box>
-          <Search1></Search1>
+        
         </Toolbar>
       </Container>
       
