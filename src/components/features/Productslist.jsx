@@ -14,8 +14,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Button, Container} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { addCartItems } from "../redux/slices/itemSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Pagination1 from "./Pagination";
+// import Search1 from "./Search";
 
 
 
@@ -36,7 +37,11 @@ export default function Productlist() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const itemsPerPage = 20;
+  let dispatch = useDispatch();
+
+  let cartItem = useSelector((store) => store.item.cartItems) || [];
+
+  const itemsPerPage = 3;
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -47,29 +52,27 @@ export default function Productlist() {
     )
     .slice(startIndex, endIndex);
 
-  // Calculate the total number of pages based on the filtered products
+ 
   const totalPages = Math.ceil(products.filter((product) =>
     product.title.toLowerCase().includes(searchTerm.toLowerCase())
   ).length / itemsPerPage);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-    setCurrentPage(1); // Reset to first page on each search
+    setCurrentPage(1)
   };
+  
 
-  // Function to handle page changes
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
  
-  let dispatch = useDispatch();
-
-  let cartItem = useSelector((store) => store.item.cartItems);
-  const navigate = useNavigate();
+  
+  
 
   let gettingProducts = async () => {
-    let data = await fetch("https://api.escuelajs.co/api/v1/products");
+    let data = await fetch("https://fakestoreapi.com/products");
     try {
       let Jsondata = await data.json();
       setProducts(Jsondata);
@@ -81,7 +84,7 @@ export default function Productlist() {
 
   useEffect(() => {
     gettingProducts(currentPage);
-  }, [currentPage]);
+  }, [currentPage,searchTerm]);
 
   const handleExpandClick = (index) => {
     setExpandedIndex((prevIndex) => (prevIndex === index ? -1 : index));
@@ -100,7 +103,7 @@ export default function Productlist() {
         alignItems: "center",
       }}
     >
-       {/* <Search1 handleChangeSearch={handleSearchChange} /> */}
+  {/* <Search1 handleChangeSearch={handleSearchChange} /> */}
       {productsToShow.map((item, index) => {
         const isItemInCart = cartItem.some(
           (cartItem) => cartItem.id === item.id
@@ -120,7 +123,7 @@ export default function Productlist() {
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
                   <img
-                    src={item.category.image}
+                    src={item.image}
                     style={{ objectFit: "contain" }}
                     alt=""
                   ></img>
@@ -131,13 +134,13 @@ export default function Productlist() {
             <CardMedia
               component="img"
               sx={{ width: "10rem", height: "15rem", objectFit: "contain" }}
-              image={item.category.image}
+              image={item.image}
               alt="Paella dish"
             />
             <CardContent>
-              {/* <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="text.secondary">
                 category : {item.category.toUpperCase()}
-              </Typography> */}
+              </Typography>
               <Typography sx={{ marginTop: ".5rem", marginBottom: "1rem" }}>
                 Price : {item.price}
               </Typography>
@@ -146,7 +149,6 @@ export default function Productlist() {
                 <Link to="/drawer">
                   <Button
                     variant="contained"
-                    onClick={() => navigate("/drawer")}
                   >
                     Go To Cart
                   </Button>

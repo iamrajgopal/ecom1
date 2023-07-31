@@ -8,14 +8,17 @@ const initialState = {
 
 
 const fetchItemsFromAPI = async (item) => {
-  console.log(JSON.stringify({...item}),'.......hai.......')
+  let dataToAttach = new FormData();
+  dataToAttach.append('cartItems',item);
+  console.log(dataToAttach)
+ 
   try {
     let reqoptions ={
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({item})
+      body:dataToAttach
       
     }
     const response = await fetch('http://localhost:3197/updatingCart',reqoptions);
@@ -29,8 +32,8 @@ const fetchItemsFromAPI = async (item) => {
   }
 };
 
-export const fetchItems = createAsyncThunk('cartSlice/fetchItems', async () => {
-  const response = await fetchItemsFromAPI();
+export const fetchItems = createAsyncThunk('cartSlice/fetchItems', async (item) => {
+  const response = await fetchItemsFromAPI(item);
   return response;
 });
 
@@ -71,9 +74,6 @@ export const itemSlice = createSlice({
         (total, item) => total + item.price * item.quantity,
         0
       );
-    },
-    setSearchTerm: (state, action) => {
-      return action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -101,7 +101,7 @@ export const {
   addNotes,
   quantityIncrement,
   quantityDecrement,
-  totalPrice,setSearchTerm
+  totalPrice,
 } = itemSlice.actions;
 
 export default itemSlice.reducer;

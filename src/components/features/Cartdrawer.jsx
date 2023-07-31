@@ -16,8 +16,7 @@ export default function Cartdrawer() {
 
   let cartItem = useSelector((store)=>store.item.cartItems);
   const [items, setItems] = useState([]);
-  
-  // let prices = cartItem.price.reduce((acc,cur)=> acc + cur,0);
+
 
   let prices = cartItem.reduce((acc, cur) => acc + ((cur.price)*(cur.quantity)), 0);
 

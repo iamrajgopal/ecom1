@@ -18,6 +18,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import Cart from "@mui/icons-material/ShoppingCart";
 import Cartdrawer from "./Cartdrawer";
 import { useSelector } from "react-redux";
+import Search1 from "./Search";
 
 
 
@@ -181,6 +182,9 @@ function Navbar({ onProductsButtonClick,handleSearchChange }) {
                 </MenuItem>
               ))}
             </Menu>
+          </Box>
+          <Box>
+            <Search1 handleChangeSearch={handleSearchChange}></Search1>
           </Box>
         </Toolbar>
       </Container>
